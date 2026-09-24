@@ -1,0 +1,238 @@
+<!doctype html>
+<!--
+  Design canvas — Advisor preview: main screen of a habit tracker app.
+  Three directions from three different schools (same content, three visual languages).
+
+  A · Swiss Editorial (Structural modernism / Pentagram lineage)
+      Type: Helvetica-class sans, 3-4 sizes, weight contrast via bold
+      Color: near-black #111 on cream #F8F6F2 · one accent #FF3C00 (only for "done")
+      Layout: strict grid, hairline rules, oversized folio numerals, negative space
+  B · Kenya Hara emptiness (Japanese quiet minimalism / MUJI lineage)
+      Type: delicate serif (habit name) + humanist sans, quiet sizes, never loud
+      Color: warm ink #3A342C on off-white #F5F1EA · one muted clay accent #C08259
+      Layout: ~75% whitespace, tiny content islands, faded grey captions
+  C · Zine / risograph (Independent print lineage)
+      Type: all-caps display + typewriter captions, hand-placed
+      Color: flo-pink #FF5D8F + navy #223A70 on paper #FAF6EC, spot-color feel
+      Layout: off-kilter collage, halftone dots, rotated stamps/stickers
+-->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habit Tracker — 3 направления дизайна</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; font-family: system-ui, sans-serif; background: #f4f1ec; }
+  .page-header { max-width: 1200px; margin: 0 auto; padding: 48px 24px 8px; }
+  .page-header h1 { font-size: 26px; margin: 0 0 6px; letter-spacing: -.02em; }
+  .page-header p { margin: 0; color: #777; font-size: 14px; }
+  .canvas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    padding: 40px 24px 64px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .cell {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 10px 28px rgba(0,0,0,.06);
+  }
+  .cell-label { padding: 16px 20px; border-bottom: 1px solid #eee; }
+  .cell-label h3 { margin: 0; font-size: 12px; letter-spacing: .09em; text-transform: uppercase; color: #444; font-weight: 700; }
+  .cell-label p { margin: 6px 0 0; font-size: 13px; color: #888; line-height: 1.45; }
+  .cell-body {
+    aspect-ratio: 8 / 11;
+    display: grid;
+    place-items: center;
+    padding: 18px;
+    background: #fafafa;
+  }
+  .phone {
+    width: 100%; max-width: 300px;
+    aspect-ratio: 9 / 18.5;
+    border-radius: 26px;
+    padding: 12px;
+    background: var(--bg);
+    color: var(--ink);
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.12), 0 12px 30px rgba(0,0,0,.18);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ============ A · Swiss Editorial ============ */
+  .swiss { --bg: #F8F6F2; --ink: #111111; --dim: #6f6b63; --line: #d8d4cb; --accent: #FF3C00; --font: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  .swiss .screen { font-family: var(--font); display: flex; flex-direction: column; gap: 0; height: 100%; }
+  .swiss .status { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .06em; color: var(--ink); padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+  .swiss .folio { font-size: 44px; font-weight: 700; line-height: 1; padding: 14px 0 6px; border-bottom: 2px solid var(--ink); }
+  .swiss .sub { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .swiss .row { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .swiss .row b { font-size: 15px; font-weight: 700; }
+  .swiss .row span { font-size: 11px; color: var(--dim); }
+  .swiss .check { width: 16px; height: 16px; border: 1.5px solid var(--ink); display: grid; place-items: center; font-size: 12px; font-weight: 700; line-height: 1; }
+  .swiss .check.on { background: var(--ink); color: var(--bg); }
+  .swiss .row .right { display: flex; align-items: center; gap: 8px; }
+  .swiss .goal { padding: 14px 0; border-bottom: 2px solid var(--ink); display: flex; justify-content: space-between; align-items: end; }
+  .swiss .goal small { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); }
+  .swiss .goal .n { font-size: 26px; font-weight: 700; line-height: 1; }
+  .swiss .goal .n em { font-style: normal; color: var(--accent); }
+  .swiss .nav { margin-top: auto; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 2px solid var(--ink); padding-top: 8px; }
+  .swiss .nav div { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; text-align: center; color: var(--dim); }
+  .swiss .nav div:first-child { color: var(--ink); font-weight: 700; }
+
+  /* ============ B · Kenya Hara emptiness ============ */
+  .hara { --bg: #F5F1EA; --ink: #3A342C; --dim: #a49c8e; --accent: #C08259; --serif: Georgia, "Times New Roman", serif; --sans: "Avenir Next", Avenir, "Segoe UI", sans-serif; }
+  .hara .screen { font-family: var(--sans); height: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; color: var(--ink); }
+  .hara .status { font-size: 10px; color: var(--dim); letter-spacing: .14em; text-transform: uppercase; padding: 4px 0 20px; }
+  .hara .date { font-family: var(--serif); font-size: 13px; color: var(--dim); font-style: italic; letter-spacing: .02em; }
+  .hara .center { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 22px; width: 100%; padding: 0 8px; }
+  .hara .habit { font-family: var(--serif); font-size: 24px; letter-spacing: .01em; line-height: 1.3; }
+  .hara .dot { width: 9px; height: 9px; border: 1px solid var(--accent); border-radius: 50%; margin: 0 auto; }
+  .hara .dot.filled { background: var(--accent); }
+  .hara .caption { font-size: 10px; color: var(--dim); letter-spacing: .16em; text-transform: uppercase; }
+  .hara .streak { font-family: var(--serif); color: var(--accent); }
+  .hara .rule { width: 44px; height: 1px; background: var(--dim); margin: 0 auto; }
+  .hara .footer { font-size: 9px; color: var(--dim); letter-spacing: .16em; text-transform: uppercase; padding: 18px 0 4px; opacity: .7; }
+  .hara .page-no { position: absolute; right: 14px; bottom: 10px; font-size: 9px; color: var(--dim); font-family: var(--serif); font-style: italic; }
+
+  /* ============ C · Zine / risograph ============ */
+  .zine { --paper: #FAF6EC; --ink: #1c1c1c; --pink: #FF5D8F; --navy: #223A70; --font: "Courier New", Courier, monospace; position: relative; }
+  .zine .screen { font-family: var(--font); background: var(--paper); color: var(--ink); height: 100%; display: flex; flex-direction: column; padding: 4px; }
+  .zine .screen::after { content: ""; position: absolute; inset: 0; background: radial-gradient(rgba(34,58,112,.14) 1px, transparent 1px); background-size: 9px 9px; mix-blend-mode: multiply; pointer-events: none; }
+  .zine .status { display: flex; justify-content: space-between; font-size: 10px; color: var(--navy); letter-spacing: .08em; padding: 6px 2px 10px; }
+  .zine .kicker { font-size: 11px; text-transform: uppercase; letter-spacing: .14em; color: var(--pink); padding: 10px 2px 4px; }
+  .zine .headline { font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: .02em; line-height: 1.15; color: var(--navy); padding: 2px; }
+  .zine .habit { display: flex; align-items: center; gap: 10px; padding: 10px 2px; border-bottom: 2px solid var(--navy); }
+  .zine .stamp { width: 22px; height: 22px; border: 2.5px solid var(--navy); display: grid; place-items: center; font-size: 12px; font-weight: 700; transform: rotate(-4deg); }
+  .zine .stamp svg { display: block; }
+  .zine .stamp.done { background: var(--pink); border-color: var(--pink); color: var(--paper); transform: rotate(3deg); }
+  .zine .h-name { font-size: 13px; font-weight: 700; }
+  .zine .h-meta { font-size: 10px; color: #555; }
+  .zine .h-right { margin-left: auto; text-align: right; font-size: 10px; }
+  .zine .h-right b { display: block; font-size: 13px; color: var(--pink); }
+  .zine .sticker { align-self: flex-start; background: var(--pink); color: var(--paper); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: 6px 10px; border-radius: 999px; transform: rotate(-2deg); margin: 12px 0 4px 2px; }
+  .zine .note { font-size: 10px; color: var(--ink); padding: 4px 2px; }
+  .zine .nav { margin-top: auto; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 3px solid var(--navy); padding: 8px 2px 2px; }
+  .zine .nav div { font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: var(--navy); text-align: center; }
+  .zine .nav div:first-child { color: var(--pink); font-weight: 700; }
+
+  .cell:nth-child(1) .phone, .cell:nth-child(2) .phone, .cell:nth-child(3) .phone { position: relative; }
+
+  @media (max-width: 980px) { .canvas { grid-template-columns: 1fr; max-width: 480px; } }
+</style>
+</head>
+<body>
+<header class="page-header">
+  <h1>Habit Tracker — главный экран. 3 направления</h1>
+  <p>Три школы дизайна, один и тот же контент: дата, прогресс, список привычек, стрики. Выбери направление (или микс).</p>
+</header>
+
+<main class="canvas">
+
+  <!-- ============ A · Swiss Editorial ============ -->
+  <section class="cell">
+    <header class="cell-label">
+      <h3>A · Swiss Editorial</h3>
+      <p>Строгая система: большие фолио-цифры, тонкие линии, чёрное на кремовом, акцент — только «сделано».</p>
+    </header>
+    <div class="cell-body">
+      <div class="phone swiss">
+        <div class="screen">
+          <div class="status"><span>СР 23.09</span><span>09:41</span><span>▮▮▮</span></div>
+          <div class="folio">23</div>
+          <div class="sub">Сентябрь · День 23</div>
+          <div class="goal">
+            <small>Прогресс дня</small>
+            <div class="n">4<em>/6</em></div>
+          </div>
+          <div class="row">
+            <b>Пить воду</b>
+            <div class="right"><span>· 12 дней</span><span class="check on">✓</span></div>
+          </div>
+          <div class="row">
+            <b>Чтение, 20 мин</b>
+            <div class="right"><span>· 4 дня</span><span class="check on">✓</span></div>
+          </div>
+          <div class="row">
+            <b>Утренняя пробежка</b>
+            <div class="right"><span>· 0 дней</span><span class="check"></span></div>
+          </div>
+          <div class="nav"><div>Сегодня</div><div>Статистика</div><div>Профиль</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ B · Kenya Hara emptiness ============ -->
+  <section class="cell">
+    <header class="cell-label">
+      <h3>B · Kenya Hara — пустота</h3>
+      <p>Ритуал вместо панели: один пункт в центре пустоты, тёплые чернила, тихие подписи.</p>
+    </header>
+    <div class="cell-body">
+      <div class="phone hara">
+        <div class="screen">
+          <div class="status">— 23 сентября —</div>
+          <div class="center">
+            <div class="date">среда, утро</div>
+            <div class="caption">Сегодня</div>
+            <div class="habit">Чтение<br>20 минут</div>
+            <div class="dot filled"></div>
+            <div class="caption">Следующая</div>
+            <div class="habit" style="font-size:16px; color:var(--dim);">Утренняя пробежка</div>
+            <div class="rule"></div>
+            <div class="streak" style="font-family:var(--serif); font-size:13px;">7 дней подряд</div>
+            <div class="caption">Прогресс</div>
+            <div class="dots" style="display:flex; gap:8px; justify-content:center;">
+              <span class="dot filled"></span><span class="dot filled"></span><span class="dot" style="border-color:var(--dim);"></span>
+            </div>
+          </div>
+          <div class="footer">Главная · Журнал · Профиль</div>
+          <div class="page-no">1</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ C · Zine / risograph ============ -->
+  <section class="cell">
+    <header class="cell-label">
+      <h3>C · Zine / risograph</h3>
+      <p>Живой журнал прогресса: два спот-цвета, штампы-галочки, типографские надписи и лёгкая «кривизна».</p>
+    </header>
+    <div class="cell-body">
+      <div class="phone zine">
+        <div class="screen">
+          <div class="status"><span>СР 23.09</span><span>09:41</span></div>
+          <div class="kicker">★ сегодня</div>
+          <div class="headline">4 из 6<br>сделано</div>
+          <div class="sticker">в огне 12 дней</div>
+          <div class="habit">
+            <span class="stamp done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+            <div><div class="h-name">Пить воду</div><div class="h-meta">стекло 2 литра</div></div>
+            <div class="h-right"><b>12</b>дней</div>
+          </div>
+          <div class="habit">
+            <span class="stamp done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+            <div><div class="h-name">Чтение 20 мин</div><div class="h-meta">страниц: 14</div></div>
+            <div class="h-right"><b>4</b>дня</div>
+          </div>
+          <div class="habit">
+            <span class="stamp"></span>
+            <div><div class="h-name">Пробежка</div><div class="h-meta">ожидает 18:00</div></div>
+            <div class="h-right"><b>0</b>дней</div>
+          </div>
+          <div class="note">— следующий чекап вечером</div>
+          <div class="nav"><div>● Сегодня</div><div>Статы</div><div>Профиль</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>

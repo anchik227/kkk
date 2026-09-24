@@ -1,0 +1,345 @@
+<!doctype html>
+<!--
+  Habit Tracker — Главный экран. Hi-fi прототип.
+  Направление B · Kenya Hara — «пустота» (японский тихий минимализм, линия MUJI).
+
+  СИСТЕМА (зафиксирована до отрисовки):
+  Type   · одно деликатное серифное семейство (Georgia-класс) для привычки-героя;
+           один humanist sans для микро-лейблов (uppercase, трекинг +0.14em).
+           Максимум 2 кегля на экран: большой сериф (24–28px) и микро (10–11px).
+  Color  · фон off-white #F5F1EA, тёплые чернила #3A342C (никогда чистый чёрный),
+           приглушённый #A49C8E, ОДИН акцент — глина #C08259 (только для «сделано»/серии).
+  Layout · ~75% пустоты. Контент — остров по центру. Точная вертикальная пауза.
+           Подписи мельче, чем ожидаешь. Номер страницы — выцветший серый.
+  Rhythm · «одна привычка против белого поля», ни одной лишней детали.
+  Тапы   · цели ≥44px, состояния меняются мягко, prefers-reduced-motion уважается.
+
+  3 вариации одного экрана (тот же контент, разная композиция):
+    V1 Ритуал  — одна привычка в центре пустоты, остальное — шёпот.
+    V2 Журнал  — тихий список дня, сделанное выцветает.
+    V3 Акцент  — прогресс «2/4» огромной серифной цифрой, привычки — колонкой шёпота.
+-->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habit Tracker — Главный экран</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #EFEBE3; font-family: system-ui, "Segoe UI", "Helvetica Neue", sans-serif; }
+
+  .page { max-width: 560px; margin: 0 auto; padding: 40px 20px 64px; }
+
+  .page-head { text-align: left; margin-bottom: 4px; }
+  .page-head .k { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: #9A9082; margin-bottom: 10px; }
+  .page-head h1 { margin: 0 0 6px; font-size: 24px; color: #3A342C; font-weight: 500; letter-spacing: -.01em; }
+  .page-head p { margin: 0; font-size: 13.5px; color: #8B8274; }
+
+  /* Вариации */
+  .vars { display: flex; gap: 8px; margin: 26px 0 30px; }
+  .vars button {
+    font: inherit; font-size: 13px; letter-spacing: .02em;
+    padding: 9px 16px; border-radius: 999px; cursor: pointer;
+    background: transparent; border: 1px solid #CFC7B8; color: #6E6557;
+    transition: background .25s ease, color .25s ease, border-color .25s ease;
+  }
+  .vars button:hover { border-color: #8B8274; }
+  .vars button[aria-pressed="true"] { background: #3A342C; border-color: #3A342C; color: #F5F1EA; }
+  .vars .hint { font-size: 12px; color: #9A9082; margin-left: auto; align-self: center; }
+
+  /* Телефон */
+  .phone {
+    width: 100%; max-width: 340px; margin: 0 auto;
+    aspect-ratio: 9 / 18.8; border-radius: 34px;
+    background: #F5F1EA; color: #3A342C;
+    padding: 14px 14px 10px;
+    box-shadow: inset 0 0 0 1px rgba(58,52,44,.10), 0 24px 54px rgba(58,52,44,.16);
+    position: relative;
+  }
+  .screen { position: relative; height: 100%; overflow: hidden; }
+
+  /* Общие микро-элементы */
+  .micro { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #A49C8E; }
+  .serif { font-family: Georgia, "Times New Roman", serif; }
+  .pageno { position: absolute; right: 18px; bottom: 6px; font-family: Georgia, serif; font-style: italic; font-size: 10px; color: #CDC5B6; }
+
+  .screen[hidden] { display: none; }
+
+  /* ================= V1 · РИТУАЛ ================= */
+  .v1 { height: 100%; display: flex; flex-direction: column; align-items: center; }
+  .v1 .status { padding: 6px 0 26px; }
+  .v1 .done-whisper {
+    display: flex; flex-direction: column; align-items: center; gap: 9px;
+    margin-bottom: 30px; min-height: 34px; width: 100%;
+  }
+  .v1 .whisper { font-size: 12px; color: #B7AE9E; font-family: Georgia, serif; line-height: 1.2; }
+  .v1 .whisper i { font-style: normal; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: #C08259; margin-right: 8px; vertical-align: 2px; }
+  .v1 .island {
+    flex: 1; width: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; gap: 26px;
+  }
+  .v1 .label-above { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #B7AE9E; }
+  .v1 .habit-hero {
+    font-family: Georgia, serif; font-size: 28px; line-height: 1.25; letter-spacing: .005em; color: #3A342C;
+  }
+  .v1 .habit-hero em { font-style: italic; color: #8B8274; }
+  .v1 .tap {
+    width: 64px; height: 64px; border-radius: 50%;
+    border: 1px solid #C9C0AF; background: transparent; cursor: pointer;
+    display: grid; place-items: center; color: #C08259;
+    transition: background .35s ease, border-color .35s ease, transform .35s ease;
+  }
+  .v1 .tap:hover { border-color: #C08259; }
+  .v1 .tap:active { transform: scale(.96); }
+  .v1 .tap svg { opacity: .55; transition: opacity .3s ease; }
+  .v1 .tap[aria-pressed="true"] { background: #C08259; border-color: #C08259; color: #F5F1EA; }
+  .v1 .tap[aria-pressed="true"] svg { opacity: 1; }
+  .v1 .streak { font-size: 12px; color: #A49C8E; font-family: Georgia, serif; font-style: italic; }
+  .v1 .streak b { font-weight: normal; color: #C08259; }
+  .v1 .foot { padding: 26px 0 2px; display: flex; gap: 22px; }
+  .v1 .foot .micro { text-align: center; }
+  .v1 .foot .micro.on { color: #6E6557; }
+
+  /* ================= V2 · ЖУРНАЛ ================= */
+  .v2 { height: 100%; display: flex; flex-direction: column; padding: 6px 10px 0; }
+  .v2 .status { display: flex; justify-content: space-between; padding: 4px 2px 34px; }
+  .v2 .entries { display: flex; flex-direction: column; }
+  .v2 .entry {
+    display: grid; grid-template-columns: 26px 1fr auto; align-items: baseline; gap: 14px;
+    padding: 22px 0; border-bottom: 1px solid #E6E0D2; width: 100%;
+  }
+  .v2 .entry:last-of-type { border-bottom: none; }
+  .v2 .entry .dot { width: 7px; height: 7px; border-radius: 50%; border: 1px solid #C9C0AF; align-self: center; transition: background .3s ease, border-color .3s ease; }
+  .v2 .entry .name { font-family: Georgia, serif; font-size: 17px; letter-spacing: .01em; transition: opacity .3s ease; }
+  .v2 .entry .meta { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #B7AE9E; margin-top: 3px; }
+  .v2 .entry .days { font-family: Georgia, serif; font-style: italic; font-size: 12px; color: #B7AE9E; white-space: nowrap; }
+  .v2 .entry.done .dot { background: #C08259; border-color: #C08259; }
+  .v2 .entry.done .name, .v2 .entry.done .meta, .v2 .entry.done .days { opacity: .42; }
+  .v2 .entry button { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .v2 .entry { position: relative; }
+  .v2 .tally { display: flex; justify-content: space-between; align-items: baseline; padding: 22px 0 0; }
+  .v2 .tally .big { font-family: Georgia, serif; font-size: 24px; letter-spacing: -.01em; }
+  .v2 .tally .big em { font-style: italic; color: #C08259; }
+  .v2 .tally .micro { text-align: right; line-height: 1.5; }
+  .v2 .foot { margin-top: auto; display: flex; gap: 22px; padding: 18px 0 2px; border-top: 1px solid #E6E0D2; }
+  .v2 .foot .micro { text-align: center; }
+  .v2 .foot .micro.on { color: #6E6557; }
+
+  /* ================= V3 · АКЦЕНТ ================= */
+  .v3 { height: 100%; display: flex; flex-direction: column; align-items: center; padding: 6px 6px 0; }
+  .v3 .status { padding: 6px 0 18px; }
+  .v3 .figure { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 18px; width: 100%; }
+  .v3 .num { font-family: Georgia, serif; font-size: 108px; line-height: 1; letter-spacing: -.02em; color: #3A342C; }
+  .v3 .num em { font-style: italic; color: #C08259; }
+  .v3 .fig-cap { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #B7AE9E; }
+  .v3 .whisper-col { display: flex; flex-direction: column; gap: 10px; align-items: center; padding: 0 6px 26px; }
+  .v3 .w-item { display: flex; align-items: baseline; gap: 10px; font-family: Georgia, serif; font-size: 14px; color: #8B8274; }
+  .v3 .w-item.done { color: #C4BBA8; }
+  .v3 .w-item .mark { width: 4px; height: 4px; border-radius: 50%; background: #C9C0AF; align-self: center; }
+  .v3 .w-item.done .mark { background: #C08259; }
+  .v3 .w-item button { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .v3 .w-item { position: relative; padding: 2px 6px; margin: -2px -6px; }
+  .v3 .streakline { font-size: 11px; color: #A49C8E; font-family: Georgia, serif; font-style: italic; }
+  .v3 .streakline b { color: #C08259; font-weight: normal; }
+  .v3 .foot { padding: 0 0 2px; display: flex; gap: 22px; }
+  .v3 .foot .micro { text-align: center; }
+  .v3 .foot .micro.on { color: #6E6557; }
+
+  /* Уважение к reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="page-head">
+    <div class="k">Habit Tracker · направление B — «пустота»</div>
+    <h1>Главный экран</h1>
+    <p>Один и тот же день в трёх композициях. Переключайся и тапай по привычкам (мин. цель тапа — 44px).</p>
+  </header>
+
+  <div class="vars" role="group" aria-label="Вариации экрана">
+    <button type="button" data-var="v1" aria-pressed="true">V1 · Ритуал</button>
+    <button type="button" data-var="v2" aria-pressed="false">V2 · Журнал</button>
+    <button type="button" data-var="v3" aria-pressed="false">V3 · Акцент</button>
+    <span class="hint">тапай по привычкам</span>
+  </div>
+
+  <div class="phone" id="phone">
+    <div class="screen">
+
+      <!-- ===== V1 · РИТУАЛ ===== -->
+      <div class="v1" data-screen="v1">
+        <div class="status micro">среда · 23 сентября</div>
+        <div class="done-whisper" id="v1whisper" aria-live="polite"></div>
+        <div class="island">
+          <div class="label-above">сейчас</div>
+          <div class="habit-hero" id="v1hero"></div>
+          <button class="tap" id="v1tap" type="button" aria-pressed="false" aria-label="">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+          </button>
+          <div class="streak" id="v1streak"></div>
+        </div>
+        <div class="foot">
+          <span class="micro on">Главная</span><span class="micro">Журнал</span><span class="micro">Профиль</span>
+        </div>
+        <div class="pageno">1</div>
+      </div>
+
+      <!-- ===== V2 · ЖУРНАЛ ===== -->
+      <div class="v2" data-screen="v2" hidden>
+        <div class="status"><span class="micro">среда · 23 сентября</span><span class="micro">день 23</span></div>
+        <div class="entries" id="v2entries" aria-live="polite"></div>
+        <div class="tally">
+          <div class="big"><span id="v2done">0</span> <em>/ 4</em></div>
+          <div class="micro">лучшая серия<br><span style="color:#C08259;">12 дней</span></div>
+        </div>
+        <div class="foot">
+          <span class="micro on">Главная</span><span class="micro">Журнал</span><span class="micro">Профиль</span>
+        </div>
+        <div class="pageno">1</div>
+      </div>
+
+      <!-- ===== V3 · АКЦЕНТ ===== -->
+      <div class="v3" data-screen="v3" hidden>
+        <div class="status micro">среда · 23 сентября</div>
+        <div class="figure">
+          <div class="num"><span id="v3num">0</span><em>/4</em></div>
+          <div class="fig-cap">привычек за сегодня</div>
+        </div>
+        <div class="whisper-col" id="v3whisper" aria-live="polite"></div>
+        <div class="streakline" id="v3streak"></div>
+        <div class="foot">
+          <span class="micro on">Главная</span><span class="micro">Журнал</span><span class="micro">Профиль</span>
+        </div>
+        <div class="pageno">1</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var HABITS = [
+    { id: 0, name: "Пить воду", meta: "2 литра", done: true, streak: 12 },
+    { id: 1, name: "Чтение — 20 минут", meta: "Сила привычки", done: true, streak: 4 },
+    { id: 2, name: "Утренняя прогулка", meta: "18:00 · 30 минут", done: false, streak: 0 },
+    { id: 3, name: "Медитация — 10 минут", meta: "вечером", done: false, streak: 3 }
+  ];
+
+  var phone = document.getElementById("phone");
+
+  function doneCount() { return HABITS.filter(function (h) { return h.done; }).length; }
+  function currentHabit() { return HABITS.find(function (h) { return !h.done; }) || HABITS[HABITS.length - 1]; }
+
+  /* --- V1 · Ритуал --- */
+  function renderV1() {
+    var doneHabits = HABITS.filter(function (h) { return h.done; });
+    var whisper = document.getElementById("v1whisper");
+    whisper.innerHTML = "";
+    doneHabits.forEach(function (h) {
+      var w = document.createElement("div");
+      w.className = "whisper";
+      var tick = document.createElement("i");
+      tick.setAttribute("aria-hidden", "true");
+      w.appendChild(tick);
+      w.appendChild(document.createTextNode(h.name.toLowerCase()));
+      whisper.appendChild(w);
+    });
+
+    var cur = currentHabit();
+    document.getElementById("v1hero").innerHTML = cur.name.replace(" — ", " · ");
+    var tap = document.getElementById("v1tap");
+    tap.setAttribute("aria-pressed", cur.done ? "true" : "false");
+    tap.setAttribute("aria-label", "Отметить: " + cur.name);
+    document.getElementById("v1streak").innerHTML = cur.streak > 0
+      ? ("серия <b>" + cur.streak + "</b> · " + doneCount() + " из " + HABITS.length)
+      : (doneCount() + " из " + HABITS.length + " · начни серию сегодня");
+  }
+
+  /* --- V2 · Журнал --- */
+  function renderV2() {
+    var wrap = document.getElementById("v2entries");
+    wrap.innerHTML = "";
+    HABITS.forEach(function (h) {
+      var row = document.createElement("div");
+      row.className = "entry" + (h.done ? " done" : "");
+
+      var dot = document.createElement("span");
+      dot.className = "dot"; dot.setAttribute("aria-hidden", "true");
+
+      var mid = document.createElement("span");
+      var name = document.createElement("div");
+      name.className = "name"; name.textContent = h.name;
+      var meta = document.createElement("div");
+      meta.className = "meta"; meta.textContent = h.meta;
+      mid.appendChild(name); mid.appendChild(meta);
+
+      var days = document.createElement("span");
+      days.className = "days"; days.textContent = h.streak + (h.streak === 1 ? " день" : h.streak > 0 && h.streak < 5 ? " дня" : " дней");
+
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.setAttribute("aria-label", (h.done ? "Снять отметку: " : "Отметить: ") + h.name);
+      btn.addEventListener("click", function () { toggle(h.id); });
+
+      row.appendChild(dot); row.appendChild(mid); row.appendChild(days); row.appendChild(btn);
+      wrap.appendChild(row);
+    });
+    document.getElementById("v2done").textContent = doneCount();
+  }
+
+  /* --- V3 · Акцент --- */
+  function renderV3() {
+    document.getElementById("v3num").textContent = doneCount();
+    var best = HABITS.reduce(function (m, h) { return h.streak > m ? h.streak : m; }, 0);
+    document.getElementById("v3streak").innerHTML = "лучшая серия <b>" + best + "</b>";
+
+    var col = document.getElementById("v3whisper");
+    col.innerHTML = "";
+    HABITS.forEach(function (h) {
+      var w = document.createElement("div");
+      w.className = "w-item" + (h.done ? " done" : "");
+      var mark = document.createElement("span");
+      mark.className = "mark"; mark.setAttribute("aria-hidden", "true");
+      var label = document.createElement("span");
+      label.textContent = h.name.toLowerCase();
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.setAttribute("aria-label", (h.done ? "Снять отметку: " : "Отметить: ") + h.name);
+      btn.addEventListener("click", function () { toggle(h.id); });
+      w.appendChild(mark); w.appendChild(label); w.appendChild(btn);
+      col.appendChild(w);
+    });
+  }
+
+  function toggle(id) {
+    var h = HABITS.find(function (x) { return x.id === id; });
+    if (h) h.done = !h.done;
+    renderV1(); renderV2(); renderV3();
+  }
+
+  /* --- Переключение вариаций --- */
+  var activeVar = "v1";
+  function setVar(name) {
+    activeVar = name;
+    phone.querySelectorAll("[data-screen]").forEach(function (s) {
+      s.hidden = s.getAttribute("data-screen") !== name;
+    });
+    document.querySelectorAll(".vars button").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-var") === name));
+    });
+  }
+  document.querySelectorAll(".vars button").forEach(function (b) {
+    b.addEventListener("click", function () { setVar(b.getAttribute("data-var")); });
+  });
+
+  renderV1(); renderV2(); renderV3();
+})();
+</script>
+</body>
+</html>
