@@ -5,15 +5,15 @@
 
   A · Swiss Editorial (Structural modernism / Pentagram lineage)
       Type: Helvetica-class sans, 3-4 sizes, weight contrast via bold
-      Color: near-black #111 on cream #F8F6F2 · one accent #FF3C00 (only for "done")
+      Color: cream #F8F6F2 on black #0B0B0B · one accent #FF3C00 (only for "done")
       Layout: strict grid, hairline rules, oversized folio numerals, negative space
   B · Kenya Hara emptiness (Japanese quiet minimalism / MUJI lineage)
       Type: delicate serif (habit name) + humanist sans, quiet sizes, never loud
-      Color: warm ink #3A342C on off-white #F5F1EA · one muted clay accent #C08259
-      Layout: ~75% whitespace, tiny content islands, faded grey captions
+      Color: off-white #F5F1EA on black #0B0B0B · one muted clay accent #C08259
+      Layout: ~75% empty darkness, tiny content islands, faded grey captions
   C · Zine / risograph (Independent print lineage)
       Type: all-caps display + typewriter captions, hand-placed
-      Color: flo-pink #FF5D8F + navy #223A70 on paper #FAF6EC, spot-color feel
+      Color: flo-pink #FF5D8F + steel-blue #7B96CC on black #0B0B0B, spot-color feel
       Layout: off-kilter collage, halftone dots, rotated stamps/stickers
 -->
 <html lang="ru">
@@ -23,10 +23,10 @@
 <title>Habit Tracker — 3 направления дизайна</title>
 <style>
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; font-family: system-ui, sans-serif; background: #f4f1ec; }
+  html, body { margin: 0; padding: 0; font-family: system-ui, sans-serif; background: #0B0B0B; color: #F5F1EA; }
   .page-header { max-width: 1200px; margin: 0 auto; padding: 48px 24px 8px; }
-  .page-header h1 { font-size: 26px; margin: 0 0 6px; letter-spacing: -.02em; }
-  .page-header p { margin: 0; color: #777; font-size: 14px; }
+  .page-header h1 { font-size: 26px; margin: 0 0 6px; letter-spacing: -.02em; color: #F5F1EA; }
+  .page-header p { margin: 0; color: #8F897D; font-size: 14px; }
   .canvas {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -36,20 +36,20 @@
     margin: 0 auto;
   }
   .cell {
-    background: #fff;
+    background: #151310;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 10px 28px rgba(0,0,0,.06);
+    box-shadow: 0 1px 3px rgba(0,0,0,.4), 0 10px 28px rgba(0,0,0,.5);
   }
-  .cell-label { padding: 16px 20px; border-bottom: 1px solid #eee; }
-  .cell-label h3 { margin: 0; font-size: 12px; letter-spacing: .09em; text-transform: uppercase; color: #444; font-weight: 700; }
-  .cell-label p { margin: 6px 0 0; font-size: 13px; color: #888; line-height: 1.45; }
+  .cell-label { padding: 16px 20px; border-bottom: 1px solid #2B2722; }
+  .cell-label h3 { margin: 0; font-size: 12px; letter-spacing: .09em; text-transform: uppercase; color: #E5DED2; font-weight: 700; }
+  .cell-label p { margin: 6px 0 0; font-size: 13px; color: #8F897D; line-height: 1.45; }
   .cell-body {
     aspect-ratio: 8 / 11;
     display: grid;
     place-items: center;
     padding: 18px;
-    background: #fafafa;
+    background: #0B0B0B;
   }
   .phone {
     width: 100%; max-width: 300px;
@@ -58,14 +58,14 @@
     padding: 12px;
     background: var(--bg);
     color: var(--ink);
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,.12), 0 12px 30px rgba(0,0,0,.18);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.16), 0 12px 30px rgba(0,0,0,.6);
     overflow: hidden;
     display: flex;
     flex-direction: column;
   }
 
   /* ============ A · Swiss Editorial ============ */
-  .swiss { --bg: #F8F6F2; --ink: #111111; --dim: #6f6b63; --line: #d8d4cb; --accent: #FF3C00; --font: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  .swiss { --bg: #0B0B0B; --ink: #F8F6F2; --dim: #9A9488; --line: #2B2722; --accent: #FF3C00; --font: "Helvetica Neue", Helvetica, Arial, sans-serif; }
   .swiss .screen { font-family: var(--font); display: flex; flex-direction: column; gap: 0; height: 100%; }
   .swiss .status { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .06em; color: var(--ink); padding-bottom: 6px; border-bottom: 1px solid var(--line); }
   .swiss .folio { font-size: 44px; font-weight: 700; line-height: 1; padding: 14px 0 6px; border-bottom: 2px solid var(--ink); }
@@ -85,7 +85,7 @@
   .swiss .nav div:first-child { color: var(--ink); font-weight: 700; }
 
   /* ============ B · Kenya Hara emptiness ============ */
-  .hara { --bg: #F5F1EA; --ink: #3A342C; --dim: #a49c8e; --accent: #C08259; --serif: Georgia, "Times New Roman", serif; --sans: "Avenir Next", Avenir, "Segoe UI", sans-serif; }
+  .hara { --bg: #0B0B0B; --ink: #F5F1EA; --dim: #A49C8E; --accent: #C08259; --serif: Georgia, "Times New Roman", serif; --sans: "Avenir Next", Avenir, "Segoe UI", sans-serif; }
   .hara .screen { font-family: var(--sans); height: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; color: var(--ink); }
   .hara .status { font-size: 10px; color: var(--dim); letter-spacing: .14em; text-transform: uppercase; padding: 4px 0 20px; }
   .hara .date { font-family: var(--serif); font-size: 13px; color: var(--dim); font-style: italic; letter-spacing: .02em; }
@@ -100,9 +100,9 @@
   .hara .page-no { position: absolute; right: 14px; bottom: 10px; font-size: 9px; color: var(--dim); font-family: var(--serif); font-style: italic; }
 
   /* ============ C · Zine / risograph ============ */
-  .zine { --paper: #FAF6EC; --ink: #1c1c1c; --pink: #FF5D8F; --navy: #223A70; --font: "Courier New", Courier, monospace; position: relative; }
+  .zine { --paper: #0B0B0B; --ink: #ECE5D8; --pink: #FF5D8F; --navy: #7B96CC; --font: "Courier New", Courier, monospace; position: relative; }
   .zine .screen { font-family: var(--font); background: var(--paper); color: var(--ink); height: 100%; display: flex; flex-direction: column; padding: 4px; }
-  .zine .screen::after { content: ""; position: absolute; inset: 0; background: radial-gradient(rgba(34,58,112,.14) 1px, transparent 1px); background-size: 9px 9px; mix-blend-mode: multiply; pointer-events: none; }
+  .zine .screen::after { content: ""; position: absolute; inset: 0; background: radial-gradient(rgba(255,255,255,.09) 1px, transparent 1px); background-size: 9px 9px; pointer-events: none; }
   .zine .status { display: flex; justify-content: space-between; font-size: 10px; color: var(--navy); letter-spacing: .08em; padding: 6px 2px 10px; }
   .zine .kicker { font-size: 11px; text-transform: uppercase; letter-spacing: .14em; color: var(--pink); padding: 10px 2px 4px; }
   .zine .headline { font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: .02em; line-height: 1.15; color: var(--navy); padding: 2px; }
@@ -111,7 +111,7 @@
   .zine .stamp svg { display: block; }
   .zine .stamp.done { background: var(--pink); border-color: var(--pink); color: var(--paper); transform: rotate(3deg); }
   .zine .h-name { font-size: 13px; font-weight: 700; }
-  .zine .h-meta { font-size: 10px; color: #555; }
+  .zine .h-meta { font-size: 10px; color: #9A9386; }
   .zine .h-right { margin-left: auto; text-align: right; font-size: 10px; }
   .zine .h-right b { display: block; font-size: 13px; color: var(--pink); }
   .zine .sticker { align-self: flex-start; background: var(--pink); color: var(--paper); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: 6px 10px; border-radius: 999px; transform: rotate(-2deg); margin: 12px 0 4px 2px; }

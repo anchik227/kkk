@@ -7,11 +7,11 @@
   Type   · одно деликатное серифное семейство (Georgia-класс) для привычки-героя;
            один humanist sans для микро-лейблов (uppercase, трекинг +0.14em).
            Максимум 2 кегля на экран: большой сериф (24–28px) и микро (10–11px).
-  Color  · фон off-white #F5F1EA, тёплые чернила #3A342C (никогда чистый чёрный),
-           приглушённый #A49C8E, ОДИН акцент — глина #C08259 (только для «сделано»/серии).
+  Color  · фон near-black #0B0B0B, светлые чернила #F5F1EA,
+           приглушённый #A8A093, ОДИН акцент — глина #C08259 (только для «сделано»/серии).
   Layout · ~75% пустоты. Контент — остров по центру. Точная вертикальная пауза.
            Подписи мельче, чем ожидаешь. Номер страницы — выцветший серый.
-  Rhythm · «одна привычка против белого поля», ни одной лишней детали.
+  Rhythm · «одна привычка против тёмного поля», ни одной лишней детали.
   Тапы   · цели ≥44px, состояния меняются мягко, prefers-reduced-motion уважается.
 
   3 вариации одного экрана (тот же контент, разная композиция):
@@ -26,42 +26,42 @@
 <title>Habit Tracker — Главный экран</title>
 <style>
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; background: #EFEBE3; font-family: system-ui, "Segoe UI", "Helvetica Neue", sans-serif; }
+  html, body { margin: 0; padding: 0; background: #0B0B0B; font-family: system-ui, "Segoe UI", "Helvetica Neue", sans-serif; }
 
   .page { max-width: 560px; margin: 0 auto; padding: 40px 20px 64px; }
 
   .page-head { text-align: left; margin-bottom: 4px; }
-  .page-head .k { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: #9A9082; margin-bottom: 10px; }
-  .page-head h1 { margin: 0 0 6px; font-size: 24px; color: #3A342C; font-weight: 500; letter-spacing: -.01em; }
-  .page-head p { margin: 0; font-size: 13.5px; color: #8B8274; }
+  .page-head .k { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: #A19A8C; margin-bottom: 10px; }
+  .page-head h1 { margin: 0 0 6px; font-size: 24px; color: #F5F1EA; font-weight: 500; letter-spacing: -.01em; }
+  .page-head p { margin: 0; font-size: 13.5px; color: #C9C1B3; }
 
   /* Вариации */
   .vars { display: flex; gap: 8px; margin: 26px 0 30px; }
   .vars button {
     font: inherit; font-size: 13px; letter-spacing: .02em;
     padding: 9px 16px; border-radius: 999px; cursor: pointer;
-    background: transparent; border: 1px solid #CFC7B8; color: #6E6557;
+    background: transparent; border: 1px solid #4A443C; color: #B7AF9F;
     transition: background .25s ease, color .25s ease, border-color .25s ease;
   }
-  .vars button:hover { border-color: #8B8274; }
-  .vars button[aria-pressed="true"] { background: #3A342C; border-color: #3A342C; color: #F5F1EA; }
-  .vars .hint { font-size: 12px; color: #9A9082; margin-left: auto; align-self: center; }
+  .vars button:hover { border-color: #8F8779; }
+  .vars button[aria-pressed="true"] { background: #F5F1EA; border-color: #F5F1EA; color: #0B0B0B; }
+  .vars .hint { font-size: 12px; color: #A19A8C; margin-left: auto; align-self: center; }
 
   /* Телефон */
   .phone {
     width: 100%; max-width: 340px; margin: 0 auto;
     aspect-ratio: 9 / 18.8; border-radius: 34px;
-    background: #F5F1EA; color: #3A342C;
+    background: #0B0B0B; color: #F5F1EA;
     padding: 14px 14px 10px;
-    box-shadow: inset 0 0 0 1px rgba(58,52,44,.10), 0 24px 54px rgba(58,52,44,.16);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 24px 54px rgba(0,0,0,.55);
     position: relative;
   }
   .screen { position: relative; height: 100%; overflow: hidden; }
 
   /* Общие микро-элементы */
-  .micro { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #A49C8E; }
+  .micro { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #A8A093; }
   .serif { font-family: Georgia, "Times New Roman", serif; }
-  .pageno { position: absolute; right: 18px; bottom: 6px; font-family: Georgia, serif; font-style: italic; font-size: 10px; color: #CDC5B6; }
+  .pageno { position: absolute; right: 18px; bottom: 6px; font-family: Georgia, serif; font-style: italic; font-size: 10px; color: #6E675B; }
 
   .screen[hidden] { display: none; }
 
@@ -72,21 +72,21 @@
     display: flex; flex-direction: column; align-items: center; gap: 9px;
     margin-bottom: 30px; min-height: 34px; width: 100%;
   }
-  .v1 .whisper { font-size: 12px; color: #B7AE9E; font-family: Georgia, serif; line-height: 1.2; }
+  .v1 .whisper { font-size: 12px; color: #8F8779; font-family: Georgia, serif; line-height: 1.2; }
   .v1 .whisper i { font-style: normal; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: #C08259; margin-right: 8px; vertical-align: 2px; }
   .v1 .island {
     flex: 1; width: 100%;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     text-align: center; gap: 26px;
   }
-  .v1 .label-above { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #B7AE9E; }
+  .v1 .label-above { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8F8779; }
   .v1 .habit-hero {
-    font-family: Georgia, serif; font-size: 28px; line-height: 1.25; letter-spacing: .005em; color: #3A342C;
+    font-family: Georgia, serif; font-size: 28px; line-height: 1.25; letter-spacing: .005em; color: #F5F1EA;
   }
-  .v1 .habit-hero em { font-style: italic; color: #8B8274; }
+  .v1 .habit-hero em { font-style: italic; color: #C9C1B3; }
   .v1 .tap {
     width: 64px; height: 64px; border-radius: 50%;
-    border: 1px solid #C9C0AF; background: transparent; cursor: pointer;
+    border: 1px solid #6A6357; background: transparent; cursor: pointer;
     display: grid; place-items: center; color: #C08259;
     transition: background .35s ease, border-color .35s ease, transform .35s ease;
   }
@@ -95,11 +95,11 @@
   .v1 .tap svg { opacity: .55; transition: opacity .3s ease; }
   .v1 .tap[aria-pressed="true"] { background: #C08259; border-color: #C08259; color: #F5F1EA; }
   .v1 .tap[aria-pressed="true"] svg { opacity: 1; }
-  .v1 .streak { font-size: 12px; color: #A49C8E; font-family: Georgia, serif; font-style: italic; }
+  .v1 .streak { font-size: 12px; color: #A8A093; font-family: Georgia, serif; font-style: italic; }
   .v1 .streak b { font-weight: normal; color: #C08259; }
   .v1 .foot { padding: 26px 0 2px; display: flex; gap: 22px; }
   .v1 .foot .micro { text-align: center; }
-  .v1 .foot .micro.on { color: #6E6557; }
+  .v1 .foot .micro.on { color: #C9C1B3; }
 
   /* ================= V2 · ЖУРНАЛ ================= */
   .v2 { height: 100%; display: flex; flex-direction: column; padding: 6px 10px 0; }
@@ -107,13 +107,13 @@
   .v2 .entries { display: flex; flex-direction: column; }
   .v2 .entry {
     display: grid; grid-template-columns: 26px 1fr auto; align-items: baseline; gap: 14px;
-    padding: 22px 0; border-bottom: 1px solid #E6E0D2; width: 100%;
+    padding: 22px 0; border-bottom: 1px solid #2B2722; width: 100%;
   }
   .v2 .entry:last-of-type { border-bottom: none; }
-  .v2 .entry .dot { width: 7px; height: 7px; border-radius: 50%; border: 1px solid #C9C0AF; align-self: center; transition: background .3s ease, border-color .3s ease; }
+  .v2 .entry .dot { width: 7px; height: 7px; border-radius: 50%; border: 1px solid #6A6357; align-self: center; transition: background .3s ease, border-color .3s ease; }
   .v2 .entry .name { font-family: Georgia, serif; font-size: 17px; letter-spacing: .01em; transition: opacity .3s ease; }
-  .v2 .entry .meta { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #B7AE9E; margin-top: 3px; }
-  .v2 .entry .days { font-family: Georgia, serif; font-style: italic; font-size: 12px; color: #B7AE9E; white-space: nowrap; }
+  .v2 .entry .meta { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #8F8779; margin-top: 3px; }
+  .v2 .entry .days { font-family: Georgia, serif; font-style: italic; font-size: 12px; color: #8F8779; white-space: nowrap; }
   .v2 .entry.done .dot { background: #C08259; border-color: #C08259; }
   .v2 .entry.done .name, .v2 .entry.done .meta, .v2 .entry.done .days { opacity: .42; }
   .v2 .entry button { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
@@ -122,29 +122,29 @@
   .v2 .tally .big { font-family: Georgia, serif; font-size: 24px; letter-spacing: -.01em; }
   .v2 .tally .big em { font-style: italic; color: #C08259; }
   .v2 .tally .micro { text-align: right; line-height: 1.5; }
-  .v2 .foot { margin-top: auto; display: flex; gap: 22px; padding: 18px 0 2px; border-top: 1px solid #E6E0D2; }
+  .v2 .foot { margin-top: auto; display: flex; gap: 22px; padding: 18px 0 2px; border-top: 1px solid #2B2722; }
   .v2 .foot .micro { text-align: center; }
-  .v2 .foot .micro.on { color: #6E6557; }
+  .v2 .foot .micro.on { color: #C9C1B3; }
 
   /* ================= V3 · АКЦЕНТ ================= */
   .v3 { height: 100%; display: flex; flex-direction: column; align-items: center; padding: 6px 6px 0; }
   .v3 .status { padding: 6px 0 18px; }
   .v3 .figure { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 18px; width: 100%; }
-  .v3 .num { font-family: Georgia, serif; font-size: 108px; line-height: 1; letter-spacing: -.02em; color: #3A342C; }
+  .v3 .num { font-family: Georgia, serif; font-size: 108px; line-height: 1; letter-spacing: -.02em; color: #F5F1EA; }
   .v3 .num em { font-style: italic; color: #C08259; }
-  .v3 .fig-cap { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #B7AE9E; }
+  .v3 .fig-cap { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8F8779; }
   .v3 .whisper-col { display: flex; flex-direction: column; gap: 10px; align-items: center; padding: 0 6px 26px; }
-  .v3 .w-item { display: flex; align-items: baseline; gap: 10px; font-family: Georgia, serif; font-size: 14px; color: #8B8274; }
-  .v3 .w-item.done { color: #C4BBA8; }
-  .v3 .w-item .mark { width: 4px; height: 4px; border-radius: 50%; background: #C9C0AF; align-self: center; }
+  .v3 .w-item { display: flex; align-items: baseline; gap: 10px; font-family: Georgia, serif; font-size: 14px; color: #C9C1B3; }
+  .v3 .w-item.done { color: #7E7669; }
+  .v3 .w-item .mark { width: 4px; height: 4px; border-radius: 50%; background: #6A6357; align-self: center; }
   .v3 .w-item.done .mark { background: #C08259; }
   .v3 .w-item button { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
   .v3 .w-item { position: relative; padding: 2px 6px; margin: -2px -6px; }
-  .v3 .streakline { font-size: 11px; color: #A49C8E; font-family: Georgia, serif; font-style: italic; }
+  .v3 .streakline { font-size: 11px; color: #A8A093; font-family: Georgia, serif; font-style: italic; }
   .v3 .streakline b { color: #C08259; font-weight: normal; }
   .v3 .foot { padding: 0 0 2px; display: flex; gap: 22px; }
   .v3 .foot .micro { text-align: center; }
-  .v3 .foot .micro.on { color: #6E6557; }
+  .v3 .foot .micro.on { color: #C9C1B3; }
 
   /* Уважение к reduced motion */
   @media (prefers-reduced-motion: reduce) {
