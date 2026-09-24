@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aivora — AI-ассистент вашей команды</title>
+<meta name="description" content="Aivora — AI-ассистент: отвечает по вашей базе знаний, пишет тексты и автоматизирует рутину. 14 дней бесплатно.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     UI/UX PRO MAX · DESIGN SYSTEM — Aivora (Minimalism & Swiss)
+     MASTER.md tokens → CSS custom properties (light + dark)
+     ============================================================ */
+  :root {
+    /* Light */
+    --bg: #FAF5FF;
+    --bg-subtle: #F4F0FE;
+    --surface: #FFFFFF;
+    --text: #1E1B4B;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
+    --border: #DDD6FE;
+    --primary: #7C3AED;
+    --on-primary: #FFFFFF;
+    --primary-soft: #EDE9FE;
+    --accent: #0891B2;
+    --on-accent: #000000;
+    --ring: #7C3AED;
+    --destructive: #DC2626;
+
+    --font-head: "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+    --radius: 14px;
+    --radius-lg: 20px;
+    --shadow-sm: 0 1px 2px rgba(30,27,75,.05);
+    --shadow-md: 0 6px 20px rgba(30,27,75,.07);
+    --shadow-lg: 0 24px 48px rgba(30,27,75,.12);
+
+    --container: 1140px;
+    --space-4: 4px; --space-8: 8px; --space-16: 16px; --space-24: 24px;
+    --space-32: 32px; --space-48: 48px; --space-64: 64px; --space-96: 96px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0D0A1F;
+      --bg-subtle: #14102A;
+      --surface: #171232;
+      --text: #EDE9FE;
+      --text-secondary: #C6C0EC;
+      --text-muted: #9D97C9;
+      --border: #2B2450;
+      --primary: #8B5CF6;
+      --on-primary: #150F2D;
+      --primary-soft: #241B45;
+      --accent: #22D3EE;
+      --on-accent: #042A33;
+      --ring: #A78BFA;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.35);
+      --shadow-md: 0 6px 20px rgba(0,0,0,.4);
+      --shadow-lg: 0 24px 48px rgba(0,0,0,.5);
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    transition: background .3s ease, color .3s ease;
+  }
+  h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.15; letter-spacing: -.02em; font-weight: 700; }
+  a { color: inherit; }
+  img, svg { display: block; }
+
+  .container { max-width: var(--container); margin: 0 auto; padding: 0 var(--space-24); }
+
+  :focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  .skip-link {
+    position: absolute; left: -9999px; top: 0;
+    background: var(--primary); color: var(--on-primary);
+    padding: 12px 20px; border-radius: 0 0 10px 0; font-weight: 700; z-index: 100;
+  }
+  .skip-link:focus { left: 0; }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-8);
+    padding: 12px 22px; border-radius: 10px;
+    font-family: inherit; font-size: 15px; font-weight: 700; line-height: 1;
+    cursor: pointer; border: 1px solid transparent;
+    transition: background-color .22s ease, border-color .22s ease, transform .22s ease, box-shadow .22s ease;
+    white-space: nowrap; text-decoration: none;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--primary); color: var(--on-primary); }
+  .btn-primary:hover { filter: brightness(1.06); box-shadow: var(--shadow-md); }
+  .btn-secondary { background: var(--surface); color: var(--text); border-color: var(--border); }
+  .btn-secondary:hover { border-color: var(--text-muted); }
+  .btn-lg { padding: 16px 30px; font-size: 16px; border-radius: 12px; }
+
+  /* ---------- Nav ---------- */
+  .nav {
+    position: sticky; top: 0; z-index: 60;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+  .logo { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-head); font-weight: 700; font-size: 19px; text-decoration: none; }
+  .logo-mark {
+    width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display: grid; place-items: center; color: #fff;
+    box-shadow: 0 4px 10px rgba(124,58,237,.3);
+  }
+  .nav-links { display: flex; align-items: center; gap: var(--space-32); font-size: 15px; font-weight: 500; color: var(--text-secondary); }
+  .nav-links a { text-decoration: none; transition: color .2s ease; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-right { display: flex; align-items: center; gap: var(--space-16); }
+  .nav-burger { display: none; background: none; border: 1px solid var(--border); border-radius: 8px; padding: 8px; cursor: pointer; color: var(--text); }
+  .nav-burger:hover { background: var(--bg-subtle); }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: var(--space-96) 0 var(--space-64); text-align: center; }
+  .badge {
+    display: inline-flex; align-items: center; gap: var(--space-8);
+    background: var(--primary-soft); color: var(--primary);
+    padding: 7px 16px; border-radius: 999px;
+    font-size: 13.5px; font-weight: 700; margin-bottom: var(--space-24);
+  }
+  .badge svg { width: 14px; height: 14px; }
+  .hero h1 {
+    font-size: clamp(40px, 6vw, 68px);
+    letter-spacing: -.035em;
+    max-width: 880px; margin: 0 auto var(--space-24);
+  }
+  .hero h1 .grad {
+    background: linear-gradient(110deg, var(--primary), var(--accent));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero-sub {
+    font-size: 19px; color: var(--text-secondary);
+    max-width: 620px; margin: 0 auto var(--space-32);
+  }
+  .hero-actions { display: flex; gap: var(--space-16); justify-content: center; flex-wrap: wrap; margin-bottom: var(--space-16); }
+  .hero-note { font-size: 14px; color: var(--text-muted); }
+
+  /* ---------- Product demo mockup (CSS-only) ---------- */
+  .demo-wrap { margin-top: var(--space-64); text-align: left; }
+  .demo {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    max-width: 900px; margin: 0 auto;
+  }
+  .demo::before {
+    content:""; position:absolute; inset:-30% -15% auto -15%; height:45%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--primary) 22%, transparent), transparent);
+    pointer-events:none;
+  }
+  .demo-bar { display:flex; align-items:center; gap:6px; padding:13px 18px; border-bottom:1px solid var(--border); background: var(--bg-subtle); }
+  .demo-bar i { width:10px; height:10px; border-radius:50%; }
+  .demo-bar i:nth-child(1){ background:#F97066; } .demo-bar i:nth-child(2){ background:#FDB022; } .demo-bar i:nth-child(3){ background:#12B76A; }
+  .demo-body { padding: var(--space-24); display:grid; gap: var(--space-16); }
+  .demo-col { display:grid; grid-template-columns: 1fr 1.3fr; gap: var(--space-16); }
+  .panel { background: var(--bg-subtle); border:1px solid var(--border); border-radius:12px; padding: var(--space-16); }
+  .panel h4 { font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted); font-weight:700; margin-bottom:10px; }
+  .chat { display:grid; gap:8px; }
+  .msg { border-radius:11px; padding:9px 13px; font-size:13px; width:fit-content; max-width:88%; }
+  .msg.user { justify-self:end; background:var(--primary); color:var(--on-primary); border-bottom-right-radius:3px; }
+  .msg.ai { justify-self:start; background:var(--surface); border:1px solid var(--border); border-bottom-left-radius:3px; }
+  .msg.ai b { color:var(--accent); }
+  .bars { display:flex; align-items:flex-end; gap:6px; height:64px; }
+  .bars i { flex:1; border-radius:4px 4px 0 0; background:linear-gradient(180deg, var(--primary), color-mix(in srgb, var(--primary) 45%, transparent)); }
+  .kpis { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+  .kpi { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px 12px; }
+  .kpi small { display:block; font-size:11px; color:var(--text-muted); }
+  .kpi b { font-family:var(--font-head); font-size:17px; letter-spacing:-.01em; }
+
+  /* ---------- Sections ---------- */
+  section { padding: var(--space-96) 0; }
+  .section-head { text-align:center; max-width:640px; margin:0 auto var(--space-64); }
+  .section-head .kicker { color:var(--accent); font-weight:700; font-size:14px; text-transform:uppercase; letter-spacing:.09em; margin-bottom:12px; }
+  .section-head h2 { font-size:clamp(28px, 3.5vw, 42px); margin-bottom:14px; }
+  .section-head p { color:var(--text-secondary); font-size:17px; }
+
+  /* ---------- Logos ---------- */
+  .logos { padding: var(--space-48) 0; border-block: 1px solid var(--border); }
+  .logos p { text-align:center; font-size:13px; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:.09em; margin-bottom: var(--space-24); }
+  .logos-row { display:flex; justify-content:center; flex-wrap:wrap; gap: var(--space-48); opacity:.6; }
+  .logos-row span { font-family:var(--font-head); font-weight:700; font-size:19px; color:var(--text-secondary); }
+
+  /* ---------- Features ---------- */
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap: var(--space-24); }
+  .card {
+    background: var(--surface);
+    border:1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--space-32) var(--space-24);
+    transition: box-shadow .22s ease, transform .22s ease, border-color .22s ease;
+  }
+  .card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); border-color: var(--text-muted); }
+  .card-icon { width:44px; height:44px; border-radius:12px; background:var(--primary-soft); color:var(--primary); display:grid; place-items:center; margin-bottom: var(--space-16); }
+  .card-icon svg { width:22px; height:22px; }
+  .card h3 { font-size:18px; margin-bottom:8px; }
+  .card p { color:var(--text-secondary); font-size:15px; }
+
+  /* ---------- Feature breakdown rows ---------- */
+  .breakdown { display:grid; gap: var(--space-96); }
+  .brow { display:grid; grid-template-columns:1fr 1fr; gap: var(--space-64); align-items:center; }
+  .brow:nth-child(even) .brow-text { order:2; }
+  .brow h3 { font-size:clamp(22px,2.6vw,30px); margin-bottom:14px; }
+  .brow p { color:var(--text-secondary); font-size:16px; margin-bottom: var(--space-24); }
+  .brow ul { list-style:none; display:grid; gap:12px; }
+  .brow li { display:flex; gap:10px; align-items:flex-start; font-size:15px; }
+  .brow li svg { width:18px; height:18px; color:var(--accent); flex-shrink:0; margin-top:2px; }
+  .brow-visual { background:var(--surface); border:1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-24); box-shadow: var(--shadow-md); }
+
+  /* ---------- Comparison ---------- */
+  .table-wrap { overflow-x:auto; border:1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); }
+  table { width:100%; border-collapse:collapse; min-width:640px; }
+  th, td { text-align:left; padding:15px 22px; font-size:15px; border-bottom:1px solid var(--border); }
+  thead th { background: var(--bg-subtle); font-family:var(--font-head); font-weight:700; }
+  thead th:first-child { width:42%; }
+  tr:last-child td { border-bottom:none; }
+  td svg { display:inline-block; vertical-align:-3px; }
+  td .yes { color: var(--accent); }
+  td .no { color: var(--text-muted); }
+  .tag-pop { display:inline-block; background:var(--primary); color:var(--on-primary); font-size:11px; font-weight:700; padding:2px 10px; border-radius:999px; margin-left:8px; vertical-align:2px; }
+
+  /* ---------- Testimonials ---------- */
+  .testi { background:var(--surface); border:1px solid var(--border); border-radius: var(--radius); padding: var(--space-32) var(--space-24); display:flex; flex-direction:column; }
+  .stars { color:#F7B955; font-size:14px; letter-spacing:2px; margin-bottom:14px; }
+  .testi .quote { font-size:15.5px; flex:1; margin-bottom: var(--space-24); }
+  .testi .who { display:flex; align-items:center; gap:12px; }
+  .avatar { width:42px; height:42px; border-radius:50%; display:grid; place-items:center; color:#fff; font-weight:700; font-size:14px; }
+  .who b { display:block; font-size:14.5px; }
+  .who span { font-size:13px; color:var(--text-muted); }
+
+  /* ---------- Pricing ---------- */
+  .plan { background:var(--surface); border:1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-32) var(--space-24); display:flex; flex-direction:column; position:relative; }
+  .plan.popular { border:2px solid var(--primary); box-shadow: var(--shadow-md); }
+  .plan-pop { position:absolute; top:-14px; left:50%; transform:translateX(-50%); background:var(--primary); color:var(--on-primary); font-size:12px; font-weight:700; padding:5px 14px; border-radius:999px; white-space:nowrap; }
+  .plan h3 { font-size:17px; margin-bottom:6px; }
+  .plan .desc { color:var(--text-muted); font-size:14px; min-height:44px; margin-bottom: var(--space-24); }
+  .plan .price { font-family:var(--font-head); font-size:40px; font-weight:700; letter-spacing:-.03em; }
+  .plan .price small { font-size:14px; font-weight:500; color:var(--text-muted); }
+  .plan .per { font-size:13.5px; color:var(--text-muted); margin-bottom: var(--space-24); }
+  .plan ul { list-style:none; display:grid; gap:12px; margin-bottom: var(--space-32); flex:1; }
+  .plan li { display:flex; gap:10px; font-size:14.5px; color:var(--text-secondary); }
+  .plan li svg { width:18px; height:18px; color:var(--accent); flex-shrink:0; margin-top:2px; }
+  .price-btn { width:100%; }
+
+  /* ---------- FAQ ---------- */
+  .faq { max-width:760px; margin:0 auto; display:grid; gap:12px; }
+  .faq-item { border:1px solid var(--border); border-radius: var(--radius); background:var(--surface); overflow:hidden; }
+  .faq-q {
+    width:100%; display:flex; justify-content:space-between; align-items:center; gap:16px;
+    padding:20px 22px; background:none; border:none; cursor:pointer;
+    font-family:inherit; font-size:16px; font-weight:700; color:var(--text); text-align:left;
+  }
+  .faq-q svg { flex-shrink:0; transition:transform .25s ease; color:var(--text-muted); }
+  .faq-item[aria-expanded="true"] .faq-q svg { transform:rotate(45deg); }
+  .faq-a { max-height:0; overflow:hidden; transition:max-height .3s ease; }
+  .faq-a p { padding:0 22px 20px; color:var(--text-secondary); font-size:15px; }
+
+  /* ---------- CTA ---------- */
+  .cta {
+    background: var(--primary);
+    color: var(--on-primary);
+    border-radius: var(--radius-lg);
+    text-align:center;
+    padding: var(--space-64) var(--space-32);
+    position:relative; overflow:hidden;
+  }
+  .cta::before { content:""; position:absolute; inset:auto -10% -55% -10%; height:75%; background:radial-gradient(closest-side, color-mix(in srgb, var(--accent) 45%, transparent), transparent); }
+  .cta h2 { font-size:clamp(28px,3.4vw,40px); margin-bottom:14px; position:relative; }
+  .cta p { font-size:17px; opacity:.92; max-width:520px; margin:0 auto var(--space-32); position:relative; }
+  .cta .row { display:flex; gap:var(--space-16); justify-content:center; flex-wrap:wrap; position:relative; }
+  .cta .btn-primary { background:var(--surface); color:var(--text); }
+  .cta .btn-ghost { background:transparent; color:var(--on-primary); border-color:color-mix(in srgb, var(--on-primary) 45%, transparent); }
+  .cta .btn-ghost:hover { border-color:var(--on-primary); background:color-mix(in srgb, var(--on-primary) 8%, transparent); }
+  .cta small { display:block; margin-top: var(--space-24); opacity:.8; font-size:13.5px; position:relative; }
+
+  /* ---------- Footer ---------- */
+  footer { border-top:1px solid var(--border); padding: var(--space-64) 0 var(--space-32); }
+  .footer-grid { display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap: var(--space-48); margin-bottom: var(--space-48); }
+  .footer-brand p { color:var(--text-muted); font-size:14.5px; margin-top:12px; max-width:280px; }
+  footer h5 { font-size:12.5px; text-transform:uppercase; letter-spacing:.09em; color:var(--text-muted); margin-bottom:16px; }
+  footer ul { list-style:none; display:grid; gap:11px; }
+  footer ul a { color:var(--text-secondary); font-size:14.5px; text-decoration:none; }
+  footer ul a:hover { color:var(--text); }
+  .footer-bottom { border-top:1px solid var(--border); padding-top: var(--space-24); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; color:var(--text-muted); font-size:13.5px; }
+
+  /* ---------- Reveal (subtle, 300-400ms) ---------- */
+  .reveal { opacity:0; transform:translateY(14px); transition:opacity .35s ease, transform .35s ease; }
+  .reveal.on { opacity:1; transform:none; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1024px) {
+    .demo-col { grid-template-columns:1fr; }
+    .brow { grid-template-columns:1fr; gap: var(--space-32); }
+    .brow:nth-child(even) .brow-text { order:0; }
+  }
+  @media (max-width: 840px) {
+    section { padding: var(--space-64) 0; }
+    .grid-3 { grid-template-columns:1fr; }
+    .nav-links {
+      position:absolute; top:68px; left:0; right:0;
+      background:var(--surface); border-bottom:1px solid var(--border);
+      flex-direction:column; align-items:flex-start; gap:4px;
+      padding:16px 24px 24px; display:none; box-shadow: var(--shadow-md);
+    }
+    .nav-links.open { display:flex; }
+    .nav-links a { padding:10px 0; width:100%; }
+    .nav-right .btn { display:none; }
+    .nav-burger { display:block; }
+    .footer-grid { grid-template-columns:1fr 1fr; gap: var(--space-32); }
+  }
+  @media (max-width: 560px) {
+    .hero { padding: var(--space-64) 0 var(--space-48); }
+    .footer-grid { grid-template-columns:1fr; }
+    .logos-row { gap: var(--space-24); }
+  }
+
+  /* ---------- Reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior:auto; }
+    *, *::before, *::after { animation:none !important; transition:none !important; }
+    .reveal { opacity:1; transform:none; }
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Перейти к содержимому</a>
+
+<!-- ======== NAV ======== -->
+<nav class="nav" aria-label="Основная навигация">
+  <div class="container nav-inner">
+    <a href="#" class="logo" aria-label="Aivora — на главную">
+      <span class="logo-mark" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>
+      </span>
+      Aivora
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#features">Возможности</a>
+      <a href="#product">Продукт</a>
+      <a href="#compare">Сравнение</a>
+      <a href="#pricing">Тарифы</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="nav-right">
+      <a href="#pricing" class="btn btn-primary">Начать бесплатно</a>
+      <button class="nav-burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="navLinks">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+  <!-- ======== HERO ======== -->
+  <header class="hero">
+    <div class="container">
+      <span class="badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        Новое: Aivora 2.0 — память контекста до 1 млн токенов
+      </span>
+      <h1>AI-ассистент, который <span class="grad">закрывает рутину</span> за вашу команду</h1>
+      <p class="hero-sub">Отвечает по вашей базе знаний с источниками, пишет тексты и автоматизирует задачи — прямо в рабочем процессе. Запуск за один день.</p>
+      <div class="hero-actions">
+        <a href="#pricing" class="btn btn-primary btn-lg">Начать бесплатно</a>
+        <a href="#product" class="btn btn-secondary btn-lg">Смотреть демо</a>
+      </div>
+      <p class="hero-note">14 дней полного доступа · без привязки карты</p>
+
+      <!-- Product demo (mockup, static fallback) -->
+      <div class="demo-wrap" id="product">
+        <div class="demo" role="img" aria-label="Демонстрация интерфейса Aivora: ассистент готовит дайджест продаж, аналитика и KPI">
+          <div class="demo-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="demo-body">
+            <div class="panel">
+              <h4>Ассистент Aivora</h4>
+              <div class="chat" aria-hidden="true">
+                <div class="msg user">Собери дайджест продаж за неделю и главные риски</div>
+                <div class="msg ai">Готово. Рост выручки <b>+12%</b> к прошлой неделе. Главный риск — задержка поставки у 2 клиентов, детали в отчёте.</div>
+                <div class="msg user">А если посмотреть по сегментам?</div>
+                <div class="msg ai">Enterprise +18%, SMB +9%, стартапы −4%. Черновик акции для стартапов уже подготовлен.</div>
+              </div>
+            </div>
+            <div class="demo-col">
+              <div class="panel">
+                <h4>Аналитика</h4>
+                <div class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              </div>
+              <div class="panel">
+                <h4>KPI</h4>
+                <div class="kpis">
+                  <div class="kpi"><small>Автоматизировано задач</small><b>1 284</b></div>
+                  <div class="kpi"><small>Среднее время ответа</small><b>1,2 с</b></div>
+                  <div class="kpi"><small>Довольных клиентов</small><b>98%</b></div>
+                  <div class="kpi"><small>Экономия в неделю</small><b>9,4 ч</b></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======== LOGOS ======== -->
+  <div class="logos" aria-label="Компании, которые используют Aivora">
+    <div class="container">
+      <p>Нам доверяют команды</p>
+      <div class="logos-row" aria-hidden="true">
+        <span>NordPay</span><span>Skywings</span><span>MediCore</span><span>Finstream</span><span>Cloudr</span><span>Peakly</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== FEATURES ======== -->
+  <section id="features" aria-labelledby="features-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="kicker">Возможности</div>
+        <h2 id="features-title">Всё, чтобы команда работала быстрее</h2>
+        <p>Один ассистент вместо десятка инструментов: от ответов до автоматизации рутины.</p>
+      </div>
+      <div class="grid-3">
+        <article class="card reveal">
+          <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <h3>Ответы по базе знаний</h3>
+          <p>Aivora ищет по документам, чатам и тикетам и отвечает с цитатами источников — без галлюцинаций.</p>
+        </article>
+        <article class="card reveal">
+          <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>
+          <h3>Тексты за минуты</h3>
+          <p>Письма, посты, продающие описания и черновики отчётов — в фирменном тоне вашего бренда.</p>
+        </article>
+        <article class="card reveal">
+          <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-6 4 3 5-8"/></svg></div>
+          <h3>Дайджесты и аналитика</h3>
+          <p>Утренние сводки по продажам, поддержке и трафику — с выводами, а не голыми цифрами.</p>
+        </article>
+        <article class="card reveal">
+          <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+          <h3>Автоматизация задач</h3>
+          <p>Ассистент сам создаёт задачи, ставит статусы и напоминает о сроках в вашем трекере.</p>
+        </article>
+        <article class="card reveal">
+          <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></div>
+          <h3>Безопасность уровня Enterprise</h3>
+          <p>Шифрование на всех этапах, SOC 2 Type II. Модели не обучаются на ваших данных.</p>
+        </article>
+        <article class="card reveal">
+          <div class="card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg></div>
+          <h3>40+ интеграций</h3>
+          <p>Slack, Notion, Jira, Google Workspace, CRM и открытый API — подключаются за пару кликов.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== FEATURE BREAKDOWN ======== -->
+  <section id="product2" style="background: var(--bg-subtle);" aria-labelledby="product-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="kicker">Продукт</div>
+        <h2 id="product-title">Глубже, чем обычный чат-бот</h2>
+        <p>Два ключевых сценария, которые закрывают 80% рутины.</p>
+      </div>
+      <div class="breakdown">
+        <div class="brow reveal">
+          <div class="brow-text">
+            <h3>Контекст, а не болтовня</h3>
+            <p>Aivora помнит всю историю проекта: прошлые решения, стиль компании и текущие договорённости. Каждый ответ опирается на реальный контекст вашей команды.</p>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Память до 1 млн токенов контекста</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Ответы с цитатами источников</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Фирменный тон и словарь компании</li>
+            </ul>
+          </div>
+          <div class="brow-visual" role="img" aria-label="Схема: запрос → контекст команды → ответ с источниками">
+            <svg viewBox="0 0 400 200" width="100%" height="auto" role="presentation" aria-hidden="true">
+              <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7C3AED"/><stop offset="1" stop-color="#0891B2"/></linearGradient></defs>
+              <rect x="10" y="70" width="110" height="60" rx="12" fill="var(--surface)" stroke="var(--border)"/>
+              <text x="65" y="98" text-anchor="middle" font-size="13" font-family="DM Sans, sans-serif" fill="var(--text)">Запрос</text>
+              <rect x="145" y="70" width="110" height="60" rx="12" fill="url(#g1)"/>
+              <text x="200" y="98" text-anchor="middle" font-size="13" font-family="DM Sans, sans-serif" fill="#fff">Контекст</text>
+              <rect x="280" y="70" width="110" height="60" rx="12" fill="var(--surface)" stroke="var(--border)"/>
+              <text x="335" y="98" text-anchor="middle" font-size="13" font-family="DM Sans, sans-serif" fill="var(--text)">Ответ + источники</text>
+              <path d="M120 100 H145 M255 100 H280" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arr)"/>
+              <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--text-muted)"/></marker></defs>
+            </svg>
+          </div>
+        </div>
+        <div class="brow reveal">
+          <div class="brow-text" style="order:2;">
+            <h3>Задачи делаются сами</h3>
+            <p>Поставьте цель на естественном языке — ассистент сам разложит её на шаги, создаст задачи исполнителям и проконтролирует сроки.</p>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Декомпозиция целей на задачи</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Назначение исполнителей и сроков</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Контроль и напоминания о дедлайнах</li>
+            </ul>
+          </div>
+          <div class="brow-visual" role="img" aria-label="Схема: цель → план из шагов → контроль сроков">
+            <svg viewBox="0 0 400 200" width="100%" height="auto" role="presentation" aria-hidden="true">
+              <rect x="10" y="20" width="120" height="40" rx="10" fill="var(--surface)" stroke="var(--border)"/>
+              <text x="70" y="45" text-anchor="middle" font-size="12" font-family="DM Sans, sans-serif" fill="var(--text)">Цель</text>
+              <rect x="10" y="80" width="120" height="40" rx="10" fill="var(--surface)" stroke="var(--border)"/>
+              <text x="70" y="105" text-anchor="middle" font-size="12" font-family="DM Sans, sans-serif" fill="var(--text)">План из шагов</text>
+              <rect x="10" y="140" width="120" height="40" rx="10" fill="var(--surface)" stroke="var(--border)"/>
+              <text x="70" y="165" text-anchor="middle" font-size="12" font-family="DM Sans, sans-serif" fill="var(--text)">Контроль сроков</text>
+              <rect x="200" y="55" width="180" height="90" rx="14" fill="url(#g2)"/>
+              <text x="290" y="90" text-anchor="middle" font-size="13" font-family="DM Sans, sans-serif" fill="#fff" font-weight="700">Aivora автоматизирует</text>
+              <text x="290" y="112" text-anchor="middle" font-size="12" font-family="DM Sans, sans-serif" fill="#fff">создаёт задачи, назначает,</text>
+              <text x="290" y="128" text-anchor="middle" font-size="12" font-family="DM Sans, sans-serif" fill="#fff">напоминает о дедлайнах</text>
+              <path d="M130 40 H200" stroke="var(--text-muted)" stroke-width="2"/>
+              <path d="M130 100 H200" stroke="var(--text-muted)" stroke-width="2"/>
+              <path d="M130 160 H200" stroke="var(--text-muted)" stroke-width="2"/>
+              <defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7C3AED"/><stop offset="1" stop-color="#0891B2"/></linearGradient></defs>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== COMPARISON ======== -->
+  <section id="compare" aria-labelledby="compare-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="kicker">Сравнение</div>
+        <h2 id="compare-title">Aivora против обычного подхода</h2>
+        <p>Посмотрите, что меняется, когда рутину забирает ассистент.</p>
+      </div>
+      <div class="table-wrap reveal" role="region" aria-label="Сравнение возможностей" tabindex="0">
+        <table>
+          <thead>
+            <tr>
+              <th>Возможность</th>
+              <th>Без ассистента / обычный чат-бот</th>
+              <th>Aivora<span class="tag-pop">рекомендуем</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ответы по внутренней базе знаний</td>
+              <td><svg class="no" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg> Не видит ваши документы</td>
+              <td><svg class="yes" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> С цитатами источников</td>
+            </tr>
+            <tr>
+              <td>Память контекста проекта</td>
+              <td><svg class="no" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg> Забывает через минуту</td>
+              <td><svg class="yes" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> До 1 млн токенов</td>
+            </tr>
+            <tr>
+              <td>Автоматизация задач в трекерах</td>
+              <td><svg class="no" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg> Вручную</td>
+              <td><svg class="yes" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Автоматически</td>
+            </tr>
+            <tr>
+              <td>Утренние дайджесты и аналитика</td>
+              <td><svg class="no" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg> Нет</td>
+              <td><svg class="yes" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Каждое утро с выводами</td>
+            </tr>
+            <tr>
+              <td>Внедрение</td>
+              <td><svg class="no" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg> Недели настройки</td>
+              <td><svg class="yes" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Один день</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== TESTIMONIALS ======== -->
+  <section id="testimonials" aria-labelledby="testi-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="kicker">Отзывы</div>
+        <h2 id="testi-title">Что говорят команды</h2>
+      </div>
+      <div class="grid-3">
+        <article class="testi reveal">
+          <div class="stars" aria-label="Оценка 5 из 5">★★★★★</div>
+          <p class="quote">«Aivora заменил три инструмента сразу. Поддержка отвечает вдвое быстрее, а утро я начинаю не с отчётов, а с готового дайджеста».</p>
+          <div class="who">
+            <div class="avatar" style="background:#7C3AED;">АК</div>
+            <div><b>Анна Ковалёва</b><span>COO, NordPay</span></div>
+          </div>
+        </article>
+        <article class="testi reveal">
+          <div class="stars" aria-label="Оценка 5 из 5">★★★★★</div>
+          <p class="quote">«Настроили за день, экономия — 10 человеко-часов в неделю. Ценность — ответы с источниками: любой вывод можно проверить за минуту».</p>
+          <div class="who">
+            <div class="avatar" style="background:#0891B2;">ДС</div>
+            <div><b>Дмитрий Соколов</b><span>CTO, Finstream</span></div>
+          </div>
+        </article>
+        <article class="testi reveal">
+          <div class="stars" aria-label="Оценка 5 из 5">★★★★★</div>
+          <p class="quote">«Боялся галлюцинаций. Полгода используем — ни одного критичного промаха. Внедрение в Slack команда заметила только по тому, что стало меньше рутины».</p>
+          <div class="who">
+            <div class="avatar" style="background:#12B76A;">ЕМ</div>
+            <div><b>Елена Морозова</b><span>Head of Ops, Skywings</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== PRICING ======== -->
+  <section id="pricing" aria-labelledby="pricing-title" style="background: var(--bg-subtle);">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="kicker">Тарифы</div>
+        <h2 id="pricing-title">Прозрачные цены без сюрпризов</h2>
+        <p>Начните бесплатно и масштабируйтесь, когда команда вырастет.</p>
+      </div>
+      <div class="grid-3">
+        <article class="plan reveal">
+          <h3>Старт</h3>
+          <p class="desc">Для личного использования и первой пробы.</p>
+          <div class="price">0 ₽<small> /мес</small></div>
+          <div class="per">до 100 запросов в месяц</div>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Ответы по базе знаний</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>1 источник (документы)</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Генерация текстов</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Поддержка по email</li>
+          </ul>
+          <a href="#" class="btn btn-secondary price-btn">Начать бесплатно</a>
+        </article>
+        <article class="plan popular reveal">
+          <span class="plan-pop">Самый популярный</span>
+          <h3>Команда</h3>
+          <p class="desc">Для команд до 20 человек с полным набором.</p>
+          <div class="price">1 490 ₽<small> /мес за пользователя</small></div>
+          <div class="per">безлимитные запросы</div>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Всё из «Старт»</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>10+ источников и интеграций</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Автоматизация задач</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Дайджесты и аналитика</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Роли и права доступа</li>
+          </ul>
+          <a href="#" class="btn btn-primary price-btn">Попробовать 14 дней</a>
+        </article>
+        <article class="plan reveal">
+          <h3>Enterprise</h3>
+          <p class="desc">Для крупных компаний с требованиями к безопасности.</p>
+          <div class="price">По запросу</div>
+          <div class="per">индивидуальные условия</div>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Всё из «Команда»</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>SLA 99,9% и свой менеджер</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Развёртывание в вашем облаке</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>SSO / SAML и аудит-логи</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Обучение команды</li>
+          </ul>
+          <a href="#" class="btn btn-secondary price-btn">Связаться с нами</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== FAQ ======== -->
+  <section id="faq" aria-labelledby="faq-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="kicker">FAQ</div>
+        <h2 id="faq-title">Частые вопросы</h2>
+      </div>
+      <div class="faq reveal">
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">На каких данных обучается Aivora?<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+          <div class="faq-a"><p>Мы не обучаем модели на ваших данных. Ваши документы и переписка используются только для ответов вашей команды, шифруются и не передаются третьим лицам.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Сколько времени занимает внедрение?<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+          <div class="faq-a"><p>Большинство команд запускаются за один день: подключите источники, выберите задачи для автоматизации — и ассистент уже работает. Сложные интеграции добавляются постепенно.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Можно ли остаться на бесплатном тарифе навсегда?<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+          <div class="faq-a"><p>Да. Тариф «Старт» бесплатный навсегда — до 100 запросов в месяц. Перейти на платный тариф можно в любой момент и вернуться обратно.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">А если ассистент ошибётся?<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+          <div class="faq-a"><p>Каждый ответ сопровождается источниками, и вы всегда видите, на основе чего сделан вывод. Для критичных действий работает принцип «человек в контуре».</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== CTA ======== -->
+  <section aria-labelledby="cta-title">
+    <div class="container">
+      <div class="cta reveal">
+        <h2 id="cta-title">Готовы убрать рутину из команды?</h2>
+        <p>Подключите Aivora за 10 минут. 14 дней полного доступа — бесплатно, без привязки карты.</p>
+        <div class="row">
+          <a href="#" class="btn btn-primary btn-lg">Начать бесплатно</a>
+          <a href="#faq" class="btn btn-ghost btn-lg">Задать вопрос</a>
+        </div>
+        <small>Отмена в один клик · Безопасно и конфиденциально</small>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ======== FOOTER ======== -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo" aria-label="Aivora — на главную">
+          <span class="logo-mark" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>
+          </span>
+          Aivora
+        </a>
+        <p>AI-ассистент, который помогает командам работать быстрее: отвечает, пишет и автоматизирует.</p>
+      </div>
+      <nav aria-label="Продукт">
+        <h5>Продукт</h5>
+        <ul>
+          <li><a href="#features">Возможности</a></li>
+          <li><a href="#pricing">Тарифы</a></li>
+          <li><a href="#product">Демо</a></li>
+          <li><a href="#compare">Сравнение</a></li>
+          <li><a href="#">Changelog</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Компания">
+        <h5>Компания</h5>
+        <ul>
+          <li><a href="#">О нас</a></li>
+          <li><a href="#">Блог</a></li>
+          <li><a href="#">Карьера</a></li>
+          <li><a href="#">Контакты</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Поддержка">
+        <h5>Поддержка</h5>
+        <ul>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#">База знаний</a></li>
+          <li><a href="#">Статус сервиса</a></li>
+          <li><a href="#">Документация API</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year">2026</span> Aivora. Все права защищены.</span>
+      <span><a href="#">Конфиденциальность</a> &nbsp;·&nbsp; <a href="#">Условия</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Mobile menu
+    const burger = document.getElementById('burger');
+    const navLinks = document.getElementById('navLinks');
+    burger.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+    });
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    }));
+
+    // FAQ accordion (keyboard accessible: buttons)
+    document.querySelectorAll('.faq-item').forEach(item => {
+      const q = item.querySelector('.faq-q');
+      const a = item.querySelector('.faq-a');
+      const setOpen = (open) => {
+        item.setAttribute('aria-expanded', open ? 'true' : 'false');
+        a.style.maxHeight = open ? a.scrollHeight + 'px' : null;
+      };
+      q.addEventListener('click', () => {
+        const isOpen = item.getAttribute('aria-expanded') === 'true';
+        document.querySelectorAll('.faq-item[aria-expanded="true"]').forEach(o => {
+          o.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+          o.querySelector('.faq-a').style.maxHeight = null;
+        });
+        setOpen(!isOpen);
+      });
+    });
+
+    // Subtle scroll reveal — respects prefers-reduced-motion
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  })();
+</script>
+</body>
+</html>

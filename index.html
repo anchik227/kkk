@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Аня Дмитриева — Моя первая страница</title>
+  <style>
+    :root {
+      --bg: #FAF7F2;
+      --text: #1A1A1A;
+      --muted: #555049;
+      --accent: #C2410C;
+      --border: #E7E0D6;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 18px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+
+    main {
+      max-width: 640px;
+      width: 100%;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 56px 56px 48px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+    }
+
+    .rule {
+      width: 48px;
+      height: 3px;
+      background: var(--accent);
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-size: clamp(32px, 6vw, 44px);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-style: italic;
+      font-size: 17px;
+      margin-bottom: 32px;
+    }
+
+    p { margin-bottom: 18px; }
+    p:last-child { margin-bottom: 0; }
+
+    footer {
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 14px;
+      color: var(--muted);
+      font-family: system-ui, sans-serif;
+    }
+
+    @media (max-width: 560px) {
+      main { padding: 36px 28px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="rule" aria-hidden="true"></div>
+    <h1>Аня Дмитриева</h1>
+    <p class="subtitle">Начинающий веб-разработчик</p>
+
+    <p>Привет! Меня зовут Аня Дмитриева, и я учусь веб-разработке. Сейчас я осваиваю основы HTML и CSS: как сверстать структуру страницы, подобрать шрифты и цвета и сделать вёрстку аккуратной на разных экранах.</p>
+
+    <p>Дальше меня ждут JavaScript и первые интерактивные проекты. Я верю, что лучший способ учиться — делать свои страницы руками и не бояться ошибок, поэтому эта страница и появилась. Здесь я буду публиковать свои работы и отмечать прогресс.</p>
+
+    <footer>Создано в рамках обучения веб-разработке · 2026</footer>
+  </main>
+</body>
+</html>
